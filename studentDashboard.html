@@ -1,0 +1,257 @@
+<!doctype html>
+<html class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sikhsya - Student Dashboard</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        @font-face {
+            font-family: gilroy;
+            src: url(./assets/font/Gilroy-Regular.ttf);
+        }
+
+        * {
+            font-family: gilroy;
+        }
+
+        .bg-primary-600 {
+            background-color: #2563EB;
+        }
+
+        .bg-primary-700 {
+            background-color: #1D4ED8;
+        }
+
+        .text-primary-600 {
+            color: #2563EB;
+        }
+
+        .text-primary-500 {
+            color: #3B82F6;
+        }
+
+        .btn-primary {
+            @apply bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg text-sm px-4 py-2;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary:active {
+            background-color: #1d4ed8;
+            transform: translateY(0);
+        }
+
+        .video-container {
+            @apply w-full h-full flex justify-center items-center bg-black rounded-lg;
+        }
+
+        video {
+            @apply w-full h-full object-cover rounded-lg;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 dark:bg-slate-950">
+    <div class="h-screen flex flex-col">
+        <header class="bg-gray-900 border-b border-gray-600 p-4 px-10 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white tracking-wide">Sikhsya</h1>
+            <div class="flex justify-between items-center gap-4">
+                <div class="flex items-center gap-2">
+                    <img class="w-10 h-10 rounded-full"
+                        src="https://images.unsplash.com/photo-1499996860823-5214fcc65f8f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8ZmFjZXxlbnwwfDF8MHx8fDA%3D"
+                        alt="">
+                    <div class="font-medium dark:text-white">
+                        <div>Bibhudendu</div>
+                    </div>
+                </div>
+                <button type="button"
+                    class="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 text-center dark:bg-red-500 dark:hover:bg-red-600 dark:focus:ring-red-800">
+                    <a href="./index.html">Logout</a>
+                </button>
+            </div>
+        </header>
+
+        <div class="flex w-full h-screen">
+            <!-- Left Section - 20% width -->
+            <div class="w-1/5 bg-gray-200 dark:bg-gray-800 p-6">
+                <button id="enroll-button"
+                    class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Enroll Classroom
+                </button>
+
+                <div id="enrolled-classrooms" class="mt-4">
+                    <!-- Classroom list will appear here -->
+                </div>
+            </div>
+
+            <!-- Right Section - 80% width (Initially blank) -->
+            <div class="w-4/5 bg-gray-50 dark:bg-slate-950 p-6" id="right-side">
+                <!-- Initially hidden buttons with icons -->
+                <div id="buttons-container" class="hidden mb-4 flex justify-evenly items-center">
+
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Enrolling Classroom -->
+    <div id="enroll-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+        <div class="modal-overlay fixed inset-0 bg-gray-900 bg-opacity-50" onclick="closeModal()"></div>
+        <div class="modal-content bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg relative">
+            <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Enroll Classroom</h2>
+            <div class="flex flex-col md:flex-row justify-between">
+                <!-- Left Column for Inputs -->
+                <div class="w-full md:w-1/2 space-y-4">
+                    <div>
+                        <label for="room-name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room
+                            Name</label>
+                        <input type="text" name="room-name" id="room-name"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Enter room name" required>
+                    </div>
+                    <div>
+                        <label for="passkey" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Room
+                            Passkey</label>
+                        <input type="password" name="passkey" id="passkey"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            placeholder="Enter room passkey" required>
+                    </div>
+                </div>
+                <!-- Right Column for Face Authentication -->
+                <div class="w-full md:w-1/2 mt-4 md:mt-0 md:ml-6 flex flex-col items-center">
+                    <label for="face-auth" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Face
+                        Authentication</label>
+                    <div class="video-container">
+                        <video id="video" autoplay></video>
+                    </div>
+                </div>
+            </div>
+            <!-- Full-Width Enter Room Button -->
+            <button type="submit" id="submit-button"
+                class="mt-6 w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                Enter Room
+            </button>
+            <button id="close-modal"
+                class="absolute top-3 right-3 text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('enroll-button').addEventListener('click', function () {
+            document.getElementById('enroll-modal').classList.remove('hidden');
+            startCamera();
+        });
+
+        function closeModal() {
+            document.getElementById('enroll-modal').classList.add('hidden');
+            stopCamera();
+        }
+
+        document.getElementById('close-modal').addEventListener('click', closeModal);
+
+        // Camera Functions
+        let stream;
+
+        async function startCamera() {
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                document.getElementById('video').srcObject = stream;
+            } catch (error) {
+                console.error('Error accessing webcam: ', error);
+            }
+        }
+
+        function stopCamera() {
+            if (stream) {
+                const tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                document.getElementById('video').srcObject = null;
+            }
+        }
+
+        // Handle form submission
+        document.getElementById('submit-button').addEventListener('click', function () {
+            const roomName = document.getElementById('room-name').value;
+            if (roomName) {
+                const enrolledClassrooms = document.getElementById('enrolled-classrooms');
+                const roomItem = document.createElement('div');
+                roomItem.textContent = roomName;
+                roomItem.classList.add('bg-white', 'dark:bg-gray-900', 'p-2', 'rounded-md', 'shadow-md', 'mb-2', 'cursor-pointer');
+                roomItem.addEventListener('click', function () {
+                    showClassroomDetails(roomName);
+                });
+                enrolledClassrooms.appendChild(roomItem);
+
+                // Reset form fields
+                document.getElementById('room-name').value = '';
+                document.getElementById('passkey').value = '';
+
+                closeModal();
+            }
+        });
+
+        // Show classroom details
+        function showClassroomDetails(roomName) {
+            document.getElementById('right-side').innerHTML = `
+                <div id="buttons-container" class="mb-4 flex justify-around items-center">
+                    <button id="about-class-btn" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center gap-2">
+                        <i class="fas fa-info-circle"></i> About Class
+                    </button>
+                    <button id="text-chat-btn" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center gap-2">
+                        <i class="fas fa-comments"></i> Text Chat
+                    </button>
+                    <button id="video-chat-btn" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center gap-2">
+                        <i class="fas fa-video"></i> Video Chat
+                    </button>
+                    <button id="class-note-btn" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center gap-2">
+                        <i class="fas fa-book"></i> Class Note
+                    </button>
+                    <button id="class-note-btn" class="text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-500 dark:hover:bg-blue-600 flex items-center gap-2">
+                        <i class="fas fa-book"></i> Notice Board
+                    </button>
+                </div>
+            `;
+
+            // Show buttons
+            document.getElementById('buttons-container').classList.remove('hidden');
+        }
+
+        // Optional: Add functionality to other buttons
+        document.getElementById('about-class-btn').addEventListener('click', function () {
+            document.getElementById('class-details').classList.remove('hidden');
+        });
+
+        document.getElementById('text-chat-btn').addEventListener('click', function () {
+            document.getElementById('class-details').classList.add('hidden');
+            // Add functionality to show text chat interface
+        });
+
+        document.getElementById('video-chat-btn').addEventListener('click', function () {
+            document.getElementById('class-details').classList.add('hidden');
+            // Add functionality to show video chat interface
+        });
+
+        document.getElementById('class-note-btn').addEventListener('click', function () {
+            document.getElementById('class-details').classList.add('hidden');
+            // Add functionality to show class notes
+        });
+    </script>
+
+
+</body>
+
+</html>
