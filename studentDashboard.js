@@ -170,6 +170,9 @@ function showClassroomDetails(roomName) {
                 <button id="screen-share-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
                     <i class="fas fa-desktop"></i>
                 </button>
+                <button id="leave-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                </button>
             </div>
         `;
 
@@ -218,6 +221,18 @@ function showClassroomDetails(roomName) {
             console.error("Error starting screen share", error);
           }
         });
+
+      const leaveBtn = document.getElementById("leave-btn");
+      const leavePopup = document.getElementById("leave-popup");
+      const closePopup = document.getElementById("close-popup");
+
+      leaveBtn.addEventListener("click", () => {
+        leavePopup.classList.remove("hidden");
+      });
+
+      closePopup.addEventListener("click", () => {
+        leavePopup.classList.add("hidden");
+      });
     });
 
   document
