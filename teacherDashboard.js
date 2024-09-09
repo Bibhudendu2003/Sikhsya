@@ -187,25 +187,75 @@ function showClassroomDetails(roomName, passkey) {
     .getElementById("video-chat-btn")
     .addEventListener("click", async function () {
       document.getElementById("content-area").innerHTML = `
-          <div class="video-container h-96 bg-black rounded-lg">
-              <video id="local-video" class="w-full h-full" autoplay muted></video>
-          </div>
-          <div class="flex mt-4 justify-around">
-              <button id="video-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                  <i class="fas fa-video"></i>
+          <div class="relative">
+              <!-- 3-Dot Menu Button -->
+              <button id="menu-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12 absolute top-4 right-4 z-20">
+                  <i class="fas fa-ellipsis-v"></i>
               </button>
-              <button id="audio-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                  <i class="fas fa-microphone"></i>
-              </button>
-              <button id="screen-share-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                  <i class="fas fa-desktop"></i>
-              </button>
-              <button id="record-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                  <i class="fas fa-circle"></i>
-              </button>
-              <button id="leave-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              </button>
+  
+              <!-- Student List Dropdown -->
+              <div id="student-list" class="absolute top-16 right-4 w-64 bg-white dark:bg-gray-900 rounded-lg shadow-md hidden z-10">
+                  <div class="p-2">
+                      <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Students</h3>
+                      <div id="students-list" class="text-gray-900 dark:text-gray-400">
+                          <!-- Example student list -->
+                          <div class="flex items-center justify-between mb-2">
+                              <span>Bibhudendu</span>
+                              <button class="text-red-600 dark:text-red-400" onclick="kickOutStudent(this)">
+                                <i class="fas fa-user-slash"></i>
+                              </button>
+                          </div>
+                          <div class="flex items-center justify-between mb-2">
+                              <span>Barsha</span>
+                              <button class="text-red-600 dark:text-red-400" onclick="kickOutStudent(this)">
+                                <i class="fas fa-user-slash"></i>
+                              </button>
+                          </div>
+                          <div class="flex items-center justify-between mb-2">
+                              <span>Bijaylaxmi</span>
+                              <button class="text-red-600 dark:text-red-400" onclick="kickOutStudent(this)">
+                                <i class="fas fa-user-slash"></i>
+                              </button>
+                          </div>
+                          <div class="flex items-center justify-between mb-2">
+                              <span>Mityaprangya</span>
+                              <button class="text-red-600 dark:text-red-400" onclick="kickOutStudent(this)">
+                                <i class="fas fa-user-slash"></i>
+                              </button>
+                          </div>
+                          <div class="flex items-center justify-between mb-2">
+                              <span>Suman</span>
+                              <button class="text-red-600 dark:text-red-400" onclick="kickOutStudent(this)">
+                                <i class="fas fa-user-slash"></i>
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+  
+              <!-- Video Container -->
+              <div class="video-container h-96 bg-black rounded-lg mt-4">
+                  <video id="local-video" class="w-full h-full" autoplay muted></video>
+              </div>
+  
+              <!-- Video Controls -->
+              <div class="flex mt-4 justify-around">
+                  <button id="video-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                      <i class="fas fa-video"></i>
+                  </button>
+                  <button id="audio-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                      <i class="fas fa-microphone"></i>
+                  </button>
+                  <button id="screen-share-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                      <i class="fas fa-desktop"></i>
+                  </button>
+                  <button id="record-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                      <i class="fas fa-circle"></i>
+                  </button>
+                  <button id="leave-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                  </button>
+              </div>
           </div>
       `;
 
@@ -306,14 +356,55 @@ function showClassroomDetails(roomName, passkey) {
           const stream = videoElement.srcObject;
           const tracks = stream.getTracks();
 
+          // Stop all media tracks
           tracks.forEach((track) => {
             track.stop();
           });
 
+          // Clear video element
           videoElement.srcObject = null;
-          document.getElementById("content-area").innerHTML =
-            "<p>You left the video chat.</p>";
+
+          // Display the recorded video and summary section
+          document.getElementById("content-area").innerHTML = `
+            <div id="summary-section" class="p-4">
+                <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Class Recording</h2>
+                    <video id="recorded-video" class="w-full h-80 bg-black rounded-lg" controls>
+                        <source src="class-recording.webm" type="video/webm">
+                        Your browser does not support the video tag.
+                    </video>
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-6 mb-4">AI-Generated Summary</h2>
+                    <div id="ai-summary" class="text-gray-900 dark:text-gray-400">
+                        <!-- Placeholder for AI-generated summary -->
+                        <p>Generating summary...</p>
+                    </div>
+                </div>
+            </div>
+  `;
+
+          // Simulate AI summary generation
+          setTimeout(() => {
+            document.getElementById("ai-summary").innerHTML = `
+      <p>Summary of the class will be displayed here. This summary is generated by AI from the recorded video.</p>
+    `;
+          }, 2000); // Simulate delay for summary generation
         });
+
+      // Toggle student list
+      document
+        .getElementById("menu-btn")
+        .addEventListener("click", function () {
+          const studentList = document.getElementById("student-list");
+          studentList.classList.toggle("hidden");
+        });
+
+      // Function to kick out a student
+      window.kickOutStudent = function (button) {
+        if (confirm("Are you sure you want to kick out this student?")) {
+          button.parentElement.remove(); // Remove student from the list
+          // Logic to notify backend or server to remove student would go here
+        }
+      };
     });
 
   document
@@ -436,12 +527,12 @@ function showClassroomDetails(roomName, passkey) {
 
       const feedbackData = [
         {
-          studentName: "John Doe",
+          studentName: "Barsha",
           summary: "Great class! I learned a lot about AI.",
           feedback: "Please provide more examples.",
         },
         {
-          studentName: "Jane Smith",
+          studentName: "Suman",
           summary: "The session was informative.",
           feedback: "It would be helpful to have more interactive activities.",
         },
@@ -485,11 +576,11 @@ function showClassroomDetails(roomName, passkey) {
 
       const doubtsData = [
         {
-          studentName: "John Doe",
+          studentName: "Mityaprangya",
           doubt: "Can you explain the concept of closures in JavaScript?",
         },
         {
-          studentName: "Jane Smith",
+          studentName: "Suman",
           doubt: "I don't understand how event delegation works.",
         },
       ];

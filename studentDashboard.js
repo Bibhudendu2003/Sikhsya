@@ -128,7 +128,7 @@ function showClassroomDetails(roomName) {
                         <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-1.jpg" alt="User image">
                         <div class="flex flex-col w-full max-w-[320px] leading-1.5">
                             <div class="flex items-center space-x-2 rtl:space-x-reverse">
-                                <span class="text-sm font-semibold text-gray-900 dark:text-white">Bishnu Prasad</span>
+                                <span class="text-sm font-semibold text-gray-900 dark:text-white">Mityaprangya</span>
                                 <span class="text-sm font-normal text-gray-500 dark:text-gray-400">11:46</span>
                             </div>
                             <p class="text-sm font-normal py-2 text-gray-900 dark:text-white">That's awesome. I think our users will really appreciate the improvements.</p>
@@ -137,7 +137,7 @@ function showClassroomDetails(roomName) {
                     </div>
 
                     <div class="flex items-start gap-2.5">
-                        <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-2.jpg" alt="Sender image">
+                        <img class="w-8 h-8 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-4.jpg" alt="Sender image">
                         <div class="flex flex-col w-full max-w-[320px] leading-1.5">
                             <div class="flex items-center space-x-2 rtl:space-x-reverse">
                                 <span class="text-sm font-semibold text-gray-900 dark:text-white">Bijaylaxmi</span>
@@ -162,24 +162,24 @@ function showClassroomDetails(roomName) {
     .getElementById("video-chat-btn")
     .addEventListener("click", async function () {
       document.getElementById("content-area").innerHTML = `
-            <div class="video-container h-96 bg-black rounded-lg">
-                <video id="local-video" class="w-full h-full" autoplay muted></video>
-            </div>
-            <div class="flex mt-4 justify-around">
-                <button id="video-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                    <i class="fas fa-video"></i>
-                </button>
-                <button id="audio-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                    <i class="fas fa-microphone"></i>
-                </button>
-                <button id="screen-share-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                    <i class="fas fa-desktop"></i>
-                </button>
-                <button id="leave-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
-                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
-                </button>
-            </div>
-        `;
+          <div class="video-container h-96 bg-black rounded-lg">
+              <video id="local-video" class="w-full h-full" autoplay muted></video>
+          </div>
+          <div class="flex mt-4 justify-around">
+              <button id="video-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                  <i class="fas fa-video"></i>
+              </button>
+              <button id="audio-toggle-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                  <i class="fas fa-microphone"></i>
+              </button>
+              <button id="screen-share-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                  <i class="fas fa-desktop"></i>
+              </button>
+              <button id="leave-btn" class="p-2 bg-gray-800 text-white rounded-full w-12 h-12">
+                  <i class="fa-solid fa-arrow-right-from-bracket"></i>
+              </button>
+          </div>
+      `;
 
       const videoElement = document.getElementById("local-video");
 
@@ -230,13 +230,59 @@ function showClassroomDetails(roomName) {
       const leaveBtn = document.getElementById("leave-btn");
       const leavePopup = document.getElementById("leave-popup");
       const closePopup = document.getElementById("close-popup");
+      const leaveForm = document.getElementById("leave-form");
 
+      // Show leave feedback popup
       leaveBtn.addEventListener("click", () => {
         leavePopup.classList.remove("hidden");
       });
 
+      // Close popup without action
       closePopup.addEventListener("click", () => {
         leavePopup.classList.add("hidden");
+      });
+
+      // Handle form submission
+      leaveForm.addEventListener("submit", function (event) {
+        event.preventDefault(); // Prevent form from submitting normally
+
+        // Stop all media tracks
+        const stream = videoElement.srcObject;
+        const tracks = stream.getTracks();
+        tracks.forEach((track) => {
+          track.stop();
+        });
+
+        // Clear video element
+        videoElement.srcObject = null;
+
+        // Hide popup
+        leavePopup.classList.add("hidden");
+
+        // Display the recorded video and summary section
+        document.getElementById("content-area").innerHTML = `
+          <div id="summary-section" class="p-4">
+              <div class="bg-white dark:bg-gray-900 p-6 rounded-lg shadow-md">
+                  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Class Recording</h2>
+                  <video id="recorded-video" class="w-full h-80 bg-black rounded-lg" controls>
+                      <source src="class-recording.webm" type="video/webm">
+                      Your browser does not support the video tag.
+                  </video>
+                  <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-6 mb-4">AI-Generated Summary</h2>
+                  <div id="ai-summary" class="text-gray-900 dark:text-gray-400">
+                      <!-- Placeholder for AI-generated summary -->
+                      <p>Generating summary...</p>
+                  </div>
+              </div>
+          </div>
+        `;
+
+        // Simulate AI summary generation
+        setTimeout(() => {
+          document.getElementById("ai-summary").innerHTML = `
+            <p>Summary of the class will be displayed here. This summary is generated by AI from the recorded video.</p>
+          `;
+        }, 2000); // Simulate delay for summary generation
       });
     });
 
