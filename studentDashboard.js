@@ -30,10 +30,15 @@ function stopCamera() {
   }
 }
 
-// Handle form submission
+// Handle form submission with validation
 document.getElementById("submit-button").addEventListener("click", function () {
-  const roomName = document.getElementById("room-name").value;
-  if (roomName) {
+  const roomName = document.getElementById("room-name").value.trim();
+  const passkey = document.getElementById("passkey").value.trim();
+
+  // Check if both fields are filled
+  if (roomName === "" || passkey === "") {
+    alert("Please fill in both the Room Name and Passkey fields.");
+  } else {
     const enrolledClassrooms = document.getElementById("enrolled-classrooms");
     const roomItem = document.createElement("div");
     roomItem.textContent = roomName;

@@ -12,13 +12,15 @@ document
   .getElementById("close-create-modal")
   .addEventListener("click", closeCreateModal);
 
+// Handle classroom creation
 document
   .getElementById("create-classroom-button")
   .addEventListener("click", function () {
     const roomName = document.getElementById("classroom-name").value;
     const passkey = document.getElementById("room-passkey").value;
+    const studentPhotos = document.getElementById("student-photos").files;
 
-    if (roomName && passkey) {
+    if (roomName && passkey && studentPhotos.length > 0) {
       const createdClassrooms = document.getElementById("created-classrooms");
 
       // Create a new classroom item
@@ -46,6 +48,7 @@ document
       document.getElementById("classroom-name").value = ""; // Reset 'classroom-name'
       document.getElementById("room-passkey").value = ""; // Reset 'room-passkey'
       document.getElementById("student-photos").value = ""; // Reset 'student-photos'
+      document.getElementById("photo-preview").innerHTML = ""; // Clear the preview
 
       // Close the modal
       closeCreateModal();
@@ -54,13 +57,39 @@ document
     }
   });
 
-// Function to close the modal
-function closeCreateModal() {
-  document.getElementById("create-modal").classList.add("hidden");
-}
+// Handle file input and preview
+const photoUploadArea = document.getElementById("photo-upload-area");
+const studentPhotosInput = document.getElementById("student-photos");
+const photoPreview = document.getElementById("photo-preview");
+
+photoUploadArea.addEventListener("click", () => studentPhotosInput.click());
+
+studentPhotosInput.addEventListener("change", (event) => {
+  photoPreview.innerHTML = ""; // Clear previous thumbnails
+  const files = event.target.files;
+  if (files.length > 0) {
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const img = document.createElement("img");
+        img.src = e.target.result;
+        img.classList.add(
+          "w-12",
+          "h-12",
+          "object-cover",
+          "rounded-md",
+          "shadow",
+          "flex-shrink-0"
+        );
+        photoPreview.appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+});
 
 // Placeholder function for classroom details (can be extended later)
-function showClassroomDetails(roomName) {
+function showClassroomDetails(roomName, passkey) {
   alert(`You clicked on classroom: ${roomName}`);
 }
 

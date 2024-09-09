@@ -129,15 +129,23 @@
                         placeholder="Enter room passkey" required>
                 </div>
 
-                <!-- Upload Student Photos -->
+                <!-- Upload Student Photos with Preview -->
                 <div>
                     <label for="student-photos"
                         class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Upload Student
                         Photos</label>
-                    <input type="file" id="student-photos" name="student-photos" multiple
-                        class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-                        accept="image/*">
-                    <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">You can select multiple student photos.</p>
+                    <div id="photo-upload-area"
+                        class="border-2 border-dashed border-gray-300 p-4 rounded-lg bg-gray-50 dark:bg-gray-700 text-center cursor-pointer">
+                        <input type="file" id="student-photos" name="student-photos" multiple class="hidden"
+                            accept="image/*">
+                        <p class="text-gray-500 dark:text-gray-400">Drag & drop student photos here or click to select
+                        </p>
+                        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">You can select multiple student photos.
+                        </p>
+                    </div>
+                    <div id="photo-preview" class="flex space-x-2 overflow-x-auto mt-2">
+                        <!-- Images will be added here dynamically -->
+                    </div>
                 </div>
             </div>
 
@@ -189,8 +197,6 @@
             </button>
         </div>
     </div>
-
-
 
     <script src="./teacherDashboard.js"></script>
 </body>
